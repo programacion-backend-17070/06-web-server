@@ -1,17 +1,35 @@
-const http = require("http")
+const http = require('http')
+const moment = require('moment')
 
+let visitas = 0
 const server = http.createServer((req, res) => {
-    if(req.url === '/') {
-        res.write('hello')
-        res.end()
+
+  visitas++
+  const horaStr = moment().format("HH")
+  const hora = Number(horaStr)
+
+  if (req.url === "/") {
+    if (hora > 6 && hora < 12) {
+        res.write("Buenos Dias")
     }
 
-    if(req.url === "/api/courses") {
-        res.write(JSON.stringify([1, 2, 3]))
-        res.end()
+    else if (hora > 13 && hora < 19) {
+        res.write("Buenos Tardes")
     }
+    else{
+        res.write("Buenas noches!")
+    }
+
+    // /visitas
+    // /api/courses
+    // /user
+
+    res.end()
+}
 })
 
-server.listen(8080)
+console.log(process.env)
+const PORT = process.env.PORT || 8080
+server.listen(PORT)
 
-console.log("listener on port 8080")
+console.log(`escuchando en el puerto ${PORT}`)
